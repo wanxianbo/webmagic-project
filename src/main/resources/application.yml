@@ -1,0 +1,25 @@
+server:
+  port: 18090
+spring:
+  application:
+    name: webmagic-project
+  datasource:
+    url: jdbc:mysql://182.61.42.24:3306/webmagic?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    username: wxb
+    password: 7421.*aA
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      idle-timeout: 600000
+      maximum-pool-size: 10
+      auto-commit: true
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: select 'x'
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: assign_id
+  mapper-locations: classpath:mapping/**/*.xml
+  type-aliases-package: com.wanxb.webmagic.*.entity
