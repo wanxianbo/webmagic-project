@@ -3,3 +3,7 @@
 /out/
 /out/production/classes/
 /out/test/classes/
+.idea
+.idea/*
+.idea/**
+*.iml
