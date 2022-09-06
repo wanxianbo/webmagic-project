@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 创建于 2022/9/2
  */
 @SpringBootApplication(scanBasePackages = {"com.wanxb"})
-@MapperScan(value = {"com.wanxb.webmagic.**.com"})
+@MapperScan(value = {"com.wanxb.webmagic.**.mapper"})
 public class WebmagicApplication {
     public static void main(String[] args) {
         SpringApplication.run(WebmagicApplication.class, args);

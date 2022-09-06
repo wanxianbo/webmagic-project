@@ -1,51 +1,73 @@
 package com.wanxb.webmagic.jobinfo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.model.annotation.ExtractByUrl;
+import us.codecraft.webmagic.model.annotation.HelpUrl;
+import us.codecraft.webmagic.model.annotation.TargetUrl;
+
 import java.io.Serializable;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author wanxianbo
  * @since 2022-09-05
  */
-@Getter
-@Setter
+@Data
 @TableName("job_info")
-@ApiModel(value = "JobInfo对象", description = "")
+@TargetUrl("https://www.liepin.com/job/*")
+@HelpUrl("https://www.liepin.com/sojob/?dqs=020&curPage=\\d+")
 public class JobInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("主键")
+    /**
+     * 主键
+     */
     private Long id;
 
-    @ApiModelProperty("标题")
+    /**
+     * 标题
+     */
+    @ExtractBy("//h1/text()")
     private String title;
 
-    @ApiModelProperty("工资")
+    /**
+     * 工资
+     */
+    @ExtractBy("//p[@class='job-item-title']/text()")
     private String salary;
 
-    @ApiModelProperty("公司")
+    /**
+     * 公司
+     */
+    @ExtractBy("//div[@class='title-info']/h3/a/text()")
     private String company;
 
-    @ApiModelProperty("描述")
+    /**
+     * 描述
+     */
+    @ExtractBy("//div[@class='content content-word']/allText()")
     private String description;
 
-    @ApiModelProperty("来源")
+    /**
+     * 来源
+     */
     private String source;
 
-    @ApiModelProperty("url")
+    /**
+     * url
+     */
+    @ExtractByUrl
     private String url;
 
-    @ApiModelProperty("md5加密url")
+    /**
+     * md5加密url
+     */
     private String urlMd5;
-
 
 }
