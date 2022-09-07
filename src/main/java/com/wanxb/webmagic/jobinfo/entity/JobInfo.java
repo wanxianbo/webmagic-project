@@ -2,10 +2,17 @@ package com.wanxb.webmagic.jobinfo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.downloader.HttpClientDownloader;
+import us.codecraft.webmagic.model.ConsolePageModelPipeline;
+import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.HelpUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
+import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
+import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 
 import java.io.Serializable;
 
@@ -19,8 +26,8 @@ import java.io.Serializable;
  */
 @Data
 @TableName("job_info")
-@TargetUrl("https://www.liepin.com/job/*")
-@HelpUrl("https://www.liepin.com/sojob/?dqs=020&curPage=\\d+")
+@TargetUrl("https://www.zhipin.com/job_detail/*")
+//@HelpUrl("https://www.zhipin.com/web/geek/job?query=&city=100010000&position=100101&page=\\d+")
 public class JobInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,25 +40,25 @@ public class JobInfo implements Serializable {
     /**
      * 标题
      */
-    @ExtractBy("//h1/text()")
+    @ExtractBy("//*[@id=\"main\"]/div[1]/div/div/div[2]/div[2]/h1")
     private String title;
 
     /**
      * 工资
      */
-    @ExtractBy("//p[@class='job-item-title']/text()")
+    @ExtractBy("//*[@id=\"main\"]/div[1]/div/div/div[2]/div[2]/span")
     private String salary;
 
     /**
      * 公司
      */
-    @ExtractBy("//div[@class='title-info']/h3/a/text()")
+    @ExtractBy("//*[@id=\"main\"]/div[3]/div/div[1]/div[2]/div/a[2]")
     private String company;
 
     /**
      * 描述
      */
-    @ExtractBy("//div[@class='content content-word']/allText()")
+    @ExtractBy("//*[@id=\"main\"]/div[3]/div/div[2]/div[2]/div[1]/div/text()")
     private String description;
 
     /**
@@ -62,12 +69,23 @@ public class JobInfo implements Serializable {
     /**
      * url
      */
-    @ExtractByUrl
+//    @ExtractByUrl
     private String url;
 
     /**
      * md5加密url
      */
     private String urlMd5;
+
+    public static void main(String[] args) {
+        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+        httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(new Proxy("127.0.0.1", 7890)));
+        OOSpider.create(Site.me().setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"),
+                        new ConsolePageModelPipeline(), JobInfo.class)
+                .addUrl("https://www.zhipin.com/job_detail/5e1860d98800c9751XR52966EFZR.html?lid=7qbCMdquHZM.search.1&securityId=tUZYsfLLK8KWT-O1_jteXRkff7o8hVnSKKLQMsTkUpX9qQKEFA9ShGWWoEWhcBz3bV301qU7tqMne-12ilkTUvYT8uve3slzlpzWpitjltUYuj602g~~")
+                .setDownloader(httpClientDownloader)
+                .thread(5)
+                .run();
+    }
 
 }
